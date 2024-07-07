@@ -3,9 +3,9 @@ package com.chaeshin.boo.domain.review;
 import com.chaeshin.boo.domain.User;
 import com.chaeshin.boo.domain.restaurant.Restaurant;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
@@ -22,10 +22,12 @@ public class Review {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @NotNull
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
+    @NotNull
     private Restaurant restaurant;
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)

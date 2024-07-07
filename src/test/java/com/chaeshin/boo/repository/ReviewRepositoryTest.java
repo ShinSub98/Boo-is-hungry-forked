@@ -10,9 +10,12 @@ import com.chaeshin.boo.repository.restaurant.RestaurantRepository;
 import com.chaeshin.boo.repository.review.ReviewImageRepository;
 import com.chaeshin.boo.repository.review.ReviewRepository;
 import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -122,6 +125,20 @@ public class ReviewRepositoryTest {
 
         // 레포지토리에서 확인
         assertEquals(20, reviewRepository.findById(review.getId()).get().getReviewImages().size());
+    }
+
+    @Test
+    public void 리뷰_이미지_테스트() throws Exception {
+        /*given*/
+        Restaurant restaurant = restaurantRepository.findById(1L).get();
+
+        /*when*/
+        List<Review> reviews = restaurant.getReviews();
+        List<ReviewImage> images = reviews.get(0).getReviewImages();
+
+        /*then*/
+        Assertions.assertEquals(3, reviews.size());
+        Assertions.assertEquals(3, images.size());
     }
 
 

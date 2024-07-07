@@ -1,10 +1,9 @@
 package com.chaeshin.boo.domain.review;
 
-import com.chaeshin.boo.domain.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Getter
@@ -18,6 +17,7 @@ public class ReviewImage {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id")
+    @NotNull
     private Review review;
 
     public ReviewImage() {

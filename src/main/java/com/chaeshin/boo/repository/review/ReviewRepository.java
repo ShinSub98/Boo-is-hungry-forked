@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+
 public interface ReviewRepository  extends JpaRepository<Review, Long> {
 
     /*유저ID를 통해 해당 유저의 리뷰를 이미지와 함께 모두 조회*/
@@ -19,6 +20,4 @@ public interface ReviewRepository  extends JpaRepository<Review, Long> {
             " join fetch r.reviewImages" +
             " where r.restaurant.id = :restaurantId")
     List<Review> findAllByRestaurantIdWithReviewImages(@Param("restaurantId") Long restaurantId);
-
-
 }

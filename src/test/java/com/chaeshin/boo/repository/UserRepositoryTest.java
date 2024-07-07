@@ -11,8 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @Transactional
 public class UserRepositoryTest {
 
-    @Autowired
-    UserRepository userRepository;
+    @Autowired UserRepository userRepository;
 
 
     @Test

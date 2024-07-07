@@ -1,6 +1,7 @@
 package com.chaeshin.boo.domain.restaurant;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,6 +18,7 @@ public class Menu {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
+    @NotNull
     private Restaurant restaurant;
 
     public Menu() {
