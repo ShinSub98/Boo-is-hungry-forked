@@ -10,25 +10,25 @@ import java.util.List;
 
 @Entity
 @Getter
-public class User {
+public class Member {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "member_id")
     private Long id;
 
     private String googleId; // 구글 PK
     private String nickname;
-    private String userLang; // 유저 선호 언어
+    private String memberLang; // 유저 선호 언어
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Review> reviews = new ArrayList<>();
 
-    public User() {}
+    public Member() {}
 
     @Builder
-    public User(String googleId, String nickname, String userLang) {
+    public Member(String googleId, String nickname, String memberLang) {
         this.googleId = googleId;
         this.nickname = nickname;
-        this.userLang = userLang;
+        this.memberLang = memberLang;
     }
 }

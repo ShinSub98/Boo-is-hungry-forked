@@ -16,7 +16,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
     /*식당ID를 통해 식당 정보와 메뉴 조회*/
     @Query("select rt from Restaurant rt" +
-            " join fetch rt.menus" +
+            " left join fetch rt.menus" +
             " where rt.id = :id")
     Restaurant findByIdWithMenus(@Param("id") Long id);
 

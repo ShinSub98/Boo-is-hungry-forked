@@ -1,11 +1,11 @@
 package com.chaeshin.boo.domain.review;
 
-import com.chaeshin.boo.domain.User;
+import com.chaeshin.boo.domain.Member;
 import com.chaeshin.boo.domain.restaurant.Restaurant;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
@@ -21,8 +21,8 @@ public class Review {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "member_id") @NotNull
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
@@ -46,10 +46,10 @@ public class Review {
     }
 
     @Builder
-    public Review(User user, Restaurant restaurant, List<ReviewImage> reviewImages,
+    public Review(Member member, Restaurant restaurant, List<ReviewImage> reviewImages,
                   List<TranslatedReview> translatedReviews, String title,
                   String body, String bodyLang, int score) {
-        this.user = user;
+        this.member = member;
         this.restaurant = restaurant;
         this.title = title;
         this.body = body;

@@ -1,6 +1,7 @@
 package com.chaeshin.boo.domain.review;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +18,7 @@ public class TranslatedReview {
     private String bodyLang; // 번역된 언어 코드
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "review_id")
+    @JoinColumn(name = "review_id") @NotNull
     private Review review;
 
     public TranslatedReview() {
