@@ -1,10 +1,13 @@
 package com.chaeshin.boo.domain.review;
 
-import com.chaeshin.boo.domain.User;
+import com.chaeshin.boo.domain.Member;
 import com.chaeshin.boo.domain.restaurant.Restaurant;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
@@ -13,6 +16,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Review {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,8 +24,9 @@ public class Review {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @NotNull
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
@@ -40,4 +45,29 @@ public class Review {
 
     @CreatedDate
     private LocalDateTime createdAt;
+
+    /**
+     * 필드를 인자로 갖는 Builder. Member, Restaurant은 필수.
+     * @param member : <b>@NonNull</b>
+     * @param restaurant : <b>@NonNull</b>
+     * @param title
+     * @param body
+     * @param bodyLang
+     * @param score
+     */
+    @Builder
+    public Review(@NonNull Member member, @NonNull Restaurant restaurant, String title,
+                  String body, String bodyLang, int score) {
+        this.member = member;
+        this.restaurant = restaurant;
+        this.title = title;
+        this.body = body;
+        this.bodyLang = bodyLang;
+        this.score = score;
+
+        // 양방향 연관관계 맺어주기
+        member.getReviews().add(this);
+        restaurant.getReviews().add(this);
+    }
+
 }
