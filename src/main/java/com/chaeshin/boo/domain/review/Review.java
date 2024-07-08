@@ -1,5 +1,6 @@
 package com.chaeshin.boo.domain.review;
 
+import com.chaeshin.boo.domain.LangCode;
 import com.chaeshin.boo.domain.Member;
 import com.chaeshin.boo.domain.restaurant.Restaurant;
 import jakarta.persistence.*;
@@ -40,8 +41,10 @@ public class Review {
 
     private String title;
     private String body;
-    private String bodyLang; // 본문의 언어코드
     private int score;
+
+    @Enumerated(EnumType.STRING)
+    private LangCode langCode; // 리뷰 본문 언어
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -57,12 +60,12 @@ public class Review {
      */
     @Builder
     public Review(@NonNull Member member, @NonNull Restaurant restaurant, String title,
-                  String body, String bodyLang, int score) {
+                  String body, LangCode langCode, int score) {
         this.member = member;
         this.restaurant = restaurant;
         this.title = title;
         this.body = body;
-        this.bodyLang = bodyLang;
+        this.langCode = langCode;
         this.score = score;
 
         // 양방향 연관관계 맺어주기
