@@ -67,7 +67,7 @@ public class MemberAuthServiceImpl implements MemberAuthService {
 //        }
 
         for (int i = 0; i < 10; i++) {
-            logger.info(redirection.toString());
+            logger.debug(redirection.toString());
         }
         return googleAuthUri + "?client_id=" + clientId +
                 "&response_type=code&redirect_uri=" + redirection.getRedirectUri() + "&scope=" + scope;
@@ -120,7 +120,7 @@ public class MemberAuthServiceImpl implements MemberAuthService {
             tokenRequestDto.setCodeAndRedirectUri(code, redirection.getRedirectUri());
         } else {
             for (int i = 0; i < 10; i++) {
-                logger.info(redirection.toString());
+                logger.debug(redirection.toString());
             }
             tokenRequestDto.setCodeAndRedirectUri(code, redirection.getRedirectUri());
         }
