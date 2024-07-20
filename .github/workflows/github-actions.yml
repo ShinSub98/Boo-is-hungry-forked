@@ -24,8 +24,6 @@ jobs:
           APPLICATION_PROD: ${{ secrets.APLLICATION_PROD }}
         run: |
           echo $APPLICATION_PROD | base64 --decode > src/main/resources/application-prod.yml
-          cat src/main/resources/application-prod.yml
-          find src
 
       # Grant execute permission for gradlew
       - name: Grant execute permission for gradlew
