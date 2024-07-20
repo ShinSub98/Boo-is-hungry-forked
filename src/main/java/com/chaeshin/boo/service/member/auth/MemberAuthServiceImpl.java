@@ -61,8 +61,12 @@ public class MemberAuthServiceImpl implements MemberAuthService {
 //        } else {
 //            redirectUri = redirection.getRedirectUri();
 //        }
+
+        for (int i = 0; i < 1000; i++) {
+            redirection.getRedirectUri();
+        }
         return googleAuthUri + "?client_id=" + clientId +
-                "&response_type=code&redirect_uri=" + redirection.getRedirectUri() + "&scope=" + scope; // 인가 코드
+                "&response_type=code&redirect_uri=" + redirection.getRedirectUri() + "&scope=" + scope;
     }
 
     /*
@@ -111,6 +115,9 @@ public class MemberAuthServiceImpl implements MemberAuthService {
         } else if (redirection.equals(Redirection.FRONT)) {
             tokenRequestDto.setCodeAndRedirectUri(code, redirection.getRedirectUri());
         } else {
+            for (int i = 0; i < 1000; i++) {
+                redirection.getRedirectUri();
+            }
             tokenRequestDto.setCodeAndRedirectUri(code, redirection.getRedirectUri());
         }
         try {
