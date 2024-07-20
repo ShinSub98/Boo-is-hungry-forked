@@ -21,8 +21,6 @@ jobs:
       # Generate application-prod.yml
       - name: generate application-prod.yml
         run: |
-#          cd ./src/main/resources
-#          printf "%s" "${{ secrets.APPLICATION_PROD }}" > .application-prod.yml
           echo "${{ secrets.APPLICATION_PROD }}" | base64 --decode > src/main/resources/application-prod.yml
           find src
 
