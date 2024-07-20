@@ -53,16 +53,16 @@ public class MemberAuthServiceImpl implements MemberAuthService {
 
     @Override
     public String getRedirectUri(Redirection redirection) {
-        String redirectUri;
-        if (redirection.equals(Redirection.BACK)) {
-            redirectUri = redirection.getRedirectUri();
-        } else if (redirection.equals(Redirection.FRONT)) {
-            redirectUri = redirection.getRedirectUri();
-        } else {
-            redirectUri = redirection.getRedirectUri();
-        }
+//        String redirectUri;
+//        if (redirection.equals(Redirection.BACK)) {
+//            redirectUri = redirection.getRedirectUri();
+//        } else if (redirection.equals(Redirection.FRONT)) {
+//            redirectUri = redirection.getRedirectUri();
+//        } else {
+//            redirectUri = redirection.getRedirectUri();
+//        }
         return googleAuthUri + "?client_id=" + clientId +
-                "&response_type=code&redirect_uri=" + redirectUri + "&scope=" + scope; // 인가 코드
+                "&response_type=code&redirect_uri=" + redirection.getRedirectUri() + "&scope=" + scope; // 인가 코드
     }
 
     /*
