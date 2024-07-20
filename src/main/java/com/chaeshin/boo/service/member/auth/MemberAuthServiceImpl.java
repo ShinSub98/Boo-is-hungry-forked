@@ -11,6 +11,8 @@ import com.chaeshin.boo.utils.jwt.JwtProvider;
 import com.chaeshin.boo.utils.RandomStringGenerator;
 import com.chaeshin.boo.utils.ResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,7 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class MemberAuthServiceImpl implements MemberAuthService {
 
+    private static final Logger log = LoggerFactory.getLogger(MemberAuthServiceImpl.class);
     private final MemberRepository memberRepository;
 
     private final JwtProvider jwtProvider;
@@ -49,6 +52,7 @@ public class MemberAuthServiceImpl implements MemberAuthService {
 
     static private Random random = new Random();
 
+    private static final Logger logger = LoggerFactory.getLogger(MemberAuthServiceImpl.class);
 
 
     @Override
@@ -62,8 +66,8 @@ public class MemberAuthServiceImpl implements MemberAuthService {
 //            redirectUri = redirection.getRedirectUri();
 //        }
 
-        for (int i = 0; i < 1000; i++) {
-            redirection.getRedirectUri();
+        for (int i = 0; i < 10; i++) {
+            logger.info(redirection.toString());
         }
         return googleAuthUri + "?client_id=" + clientId +
                 "&response_type=code&redirect_uri=" + redirection.getRedirectUri() + "&scope=" + scope;
@@ -115,8 +119,8 @@ public class MemberAuthServiceImpl implements MemberAuthService {
         } else if (redirection.equals(Redirection.FRONT)) {
             tokenRequestDto.setCodeAndRedirectUri(code, redirection.getRedirectUri());
         } else {
-            for (int i = 0; i < 1000; i++) {
-                redirection.getRedirectUri();
+            for (int i = 0; i < 10; i++) {
+                logger.info(redirection.toString());
             }
             tokenRequestDto.setCodeAndRedirectUri(code, redirection.getRedirectUri());
         }
