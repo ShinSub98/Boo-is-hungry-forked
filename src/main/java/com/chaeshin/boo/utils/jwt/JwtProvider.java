@@ -109,7 +109,8 @@ public class JwtProvider {
     public Map<String, String> refreshAccessToken(String refreshToken) {
         try {
             Jws<Claims> claims = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(refreshToken);
-            if (!claims.getPayload().get("type").equals(TokenType.REFRESH)) {
+            if (!claims.getPayload().get("type").equals(TokenType.REFRESH)
+                    && !claims.getPayload().getIssuedAt().after(new Date())) {
                 throw new RuntimeException("유효하지 않은 리프레시 토큰");
             }
             Date expireAt = claims.getPayload().getExpiration();
@@ -137,6 +138,7 @@ public class JwtProvider {
         try {
             Jws<Claims> claims = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);
             return !claims.getPayload().getExpiration().before(new Date())
+                    && !claims.getPayload().getIssuedAt().after(new Date())
                     && claims.getPayload().get("type").equals(TokenType.ACCESS);
         } catch (Exception e) {
             throw new ExpiredTokenException();
