@@ -90,12 +90,19 @@ public class MemberController {
     }
 
 
+//    @GetMapping("/server/google/")
+//    public ResponseEntity<?> redirectServer() {
+//        HttpHeaders headers = new HttpHeaders();
+//        String redirectUri = memberAuthService.getRedirectUri(Redirection.DOMAIN);
+//        headers.setLocation(URI.create(redirectUri));
+//        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+//    }
+
     @GetMapping("/server/google/")
-    public ResponseEntity<?> redirectServer() {
+    public String redirectServer() {
         HttpHeaders headers = new HttpHeaders();
         String redirectUri = memberAuthService.getRedirectUri(Redirection.DOMAIN);
-        headers.setLocation(URI.create(redirectUri));
-        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+        return redirectUri;
     }
 
 
