@@ -2,11 +2,11 @@ version: '3'
 services:
   web:
     container_name: web
-    image: shinjeongsub/hufsmeals-prod
+    image: shinjeongsub/hufsmeals-prod:latest
     restart: always
     expose:
-      - "8080"
-      - "8080:8080"
+      - "8081"
+      - "8081:8081"
   nginx:
     image: nginx:latest
     container_name: nginx
@@ -20,3 +20,4 @@ services:
       - "443:443"
     depends_on:
       - web
+    command : "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"

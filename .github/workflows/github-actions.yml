@@ -48,7 +48,6 @@ jobs:
           host: ${{ secrets.HOST_DOMAIN }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
-
           script: |
             docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
             docker stop $(docker ps -a -q) 
