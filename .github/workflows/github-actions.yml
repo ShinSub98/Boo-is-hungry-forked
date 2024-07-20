@@ -22,8 +22,7 @@ jobs:
       - name: generate application-prod.yml
         run: |
           cd ./src/main/resources
-          touch ./application-prod.yml
-          echo "${{ secrets.APPLICATION_PROD }}" > ./application-prod.yml
+          printf "%s" "${{ secrets.APPLICATION_PROD }}" > ./application-prod.yml
 
       # Grant execute permission for gradlew
       - name: Grant execute permission for gradlew
@@ -46,7 +45,7 @@ jobs:
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.HOST_DOMAIN }}
-          username: ${{ secrets.USERNAME }}
+          username: ubuntu
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
             docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
