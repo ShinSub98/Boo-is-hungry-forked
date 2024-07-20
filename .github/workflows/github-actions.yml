@@ -43,9 +43,7 @@ jobs:
 
       # Deploy
       - name: Deploy to EC2
-        uses: appleboy/ssh-action@master
-        id: deploy-prod
-        if: contains(github.ref, 'main')
+        uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.HOST_DOMAIN }}
           username: ${{ secrets.USERNAME }}
