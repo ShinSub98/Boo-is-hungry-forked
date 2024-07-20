@@ -2,6 +2,7 @@ package com.chaeshin.boo.service.member;
 
 import com.chaeshin.boo.service.member.dto.MemberInfoDto;
 import com.chaeshin.boo.utils.ResponseDto;
+import lombok.extern.slf4j.Slf4j;
 
 public interface MemberService {
 

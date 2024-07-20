@@ -11,6 +11,7 @@ import com.chaeshin.boo.utils.jwt.JwtProvider;
 import com.chaeshin.boo.utils.RandomStringGenerator;
 import com.chaeshin.boo.utils.ResponseDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,11 +27,11 @@ import java.util.Map;
 import java.util.Random;
 
 @Service
+@Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberAuthServiceImpl implements MemberAuthService {
 
-    private static final Logger log = LoggerFactory.getLogger(MemberAuthServiceImpl.class);
     private final MemberRepository memberRepository;
 
     private final JwtProvider jwtProvider;
@@ -67,7 +68,7 @@ public class MemberAuthServiceImpl implements MemberAuthService {
 //        }
 
         for (int i = 0; i < 10; i++) {
-            logger.debug(redirection.getRedirectUri());
+            log.debug(redirection.getRedirectUri());
         }
         return googleAuthUri + "?client_id=" + clientId +
                 "&response_type=code&redirect_uri=" + redirection.getRedirectUri() + "&scope=" + scope;
@@ -120,7 +121,7 @@ public class MemberAuthServiceImpl implements MemberAuthService {
             tokenRequestDto.setCodeAndRedirectUri(code, redirection.getRedirectUri());
         } else {
             for (int i = 0; i < 10; i++) {
-                logger.debug(redirection.getRedirectUri());
+                log.debug(redirection.getRedirectUri());
             }
             tokenRequestDto.setCodeAndRedirectUri(code, redirection.getRedirectUri());
         }
