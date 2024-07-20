@@ -31,3 +31,5 @@ public class MemberServiceImpl implements MemberService {
         return new ResponseDto("유저 정보 반환 성공", memberInfoDto);
     }
 }
+
+
