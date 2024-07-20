@@ -21,9 +21,8 @@ jobs:
       # Generate application-prod.yml
       - name: generate application-prod.yml
         run: |
-          cd ./src/main/resources
-          echo "${{ secrets.APPLICATION_PROD }}" | base64 --decode > application-prod.yml
-          cat application-prod.yml
+          echo "${{ secrets.APPLICATION_PROD }}" | base64 --decode > src/main/resources/application-prod.yml
+          cat src/main/resources/application-prod.yml
           find src
 
       # Grant execute permission for gradlew
