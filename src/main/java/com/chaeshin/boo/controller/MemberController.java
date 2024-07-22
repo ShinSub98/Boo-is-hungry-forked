@@ -141,16 +141,10 @@ public class MemberController {
 
     @PostMapping("/token/refresh/")
     public ResponseEntity<TokenReissueDto> refreshToken(@RequestBody Map<String, String> body) {
-        try {
-            return new ResponseEntity<>(
-                    memberAuthService.reIssueAccessToken(body.get("refresh")),
-                    HttpStatus.OK
-            );
-        } catch (ExpiredTokenException et) {
-          throw et;
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        return new ResponseEntity<>(
+                memberAuthService.reIssueAccessToken(body.get("refresh")),
+                HttpStatus.OK
+        );
     }
 
 
