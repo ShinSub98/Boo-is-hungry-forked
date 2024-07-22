@@ -1,13 +1,27 @@
-version: '3'
 services:
   server:
     container_name: server
-    image: shinjeongsub/hufsmeals-prod:latest
+    image: "${DOCKER_USERNAME}/hufsmeals-prod:latest"
     restart: always
     expose:
       - 8081
     ports:
       - 8081:8081
+
+  redis:
+    container_name: redis
+    image: redis
+    restart: always
+    expose:
+      - 6379
+    ports:
+      - 6379:6379
+    volumes:
+      - ./redis/data:/data
+    environment:
+      - REDIS_PASSWORD="${REDIS_PASSWORD}"
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+
 
   nginx:
     image: nginx:latest
