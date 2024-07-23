@@ -10,12 +10,13 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Component
 public class Translator {
 
-    static private String appKey;
+    @Value("${deepl.apiKey}")
+    private String appKey;
     static private WebClient webClient;
 
-    public Translator(@Value("${deepl.apiKey}") String appKey) {
-        this.appKey = appKey;
-    }
+//    public Translator(@Value("${deepl.apiKey}") String appKey) {
+//        this.appKey = appKey;
+//    }
 
     @PostConstruct
     public void init() {

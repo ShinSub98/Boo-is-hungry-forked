@@ -5,16 +5,15 @@ import com.chaeshin.boo.domain.Member;
 import com.chaeshin.boo.repository.member.MemberRepository;
 import com.chaeshin.boo.service.member.auth.dto.GoogleMemberInfoDto;
 import com.chaeshin.boo.service.member.auth.dto.LoginDto;
-import com.chaeshin.boo.utils.jwt.TokenReissueDto;
 import com.chaeshin.boo.service.member.auth.dto.TokenRequestDto;
-import com.chaeshin.boo.utils.jwt.JwtProvider;
 import com.chaeshin.boo.utils.RandomStringGenerator;
 import com.chaeshin.boo.utils.ResponseDto;
+import com.chaeshin.boo.utils.jwt.JwtProvider;
+import com.chaeshin.boo.utils.jwt.TokenReissueDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -42,44 +41,23 @@ public class MemberAuthServiceImpl implements MemberAuthService {
     @Value("${google.secretKey}")
     private String clientSecret;
 
-    static private String scope = URLEncoder.encode("https://www.googleapis.com/auth/userinfo.email" +
+    static private final String scope = URLEncoder.encode("https://www.googleapis.com/auth/userinfo.email" +
             " https://www.googleapis.com/auth/userinfo.profile", StandardCharsets.UTF_8);
 
-    static private String googleAuthUri = "https://accounts.google.com/o/oauth2/v2/auth";
+    private final String googleAuthUri = "https://accounts.google.com/o/oauth2/v2/auth";
 
-    static private WebClient tokenClient = WebClient.create("https://oauth2.googleapis.com/token");
+    private final WebClient tokenClient = WebClient.create("https://oauth2.googleapis.com/token");
 
-    static private WebClient memberInfoClient = WebClient.create("https://www.googleapis.com/oauth2/v2/userinfo");
+    private final WebClient memberInfoClient = WebClient.create("https://www.googleapis.com/oauth2/v2/userinfo");
 
-    static private Random random = new Random();
-
-    private static final Logger logger = LoggerFactory.getLogger(MemberAuthServiceImpl.class);
+    private final Random random = new Random();
 
 
     @Override
     public String getRedirectUri(Redirection redirection) {
-//        String redirectUri;
-//        if (redirection.equals(Redirection.BACK)) {
-//            redirectUri = redirection.getRedirectUri();
-//        } else if (redirection.equals(Redirection.FRONT)) {
-//            redirectUri = redirection.getRedirectUri();
-//        } else {
-//            redirectUri = redirection.getRedirectUri();
-//        }
-
-        for (int i = 0; i < 10; i++) {
-            log.debug(redirection.getRedirectUri());
-        }
         return googleAuthUri + "?client_id=" + clientId +
                 "&response_type=code&redirect_uri=" + redirection.getRedirectUri() + "&scope=" + scope;
     }
-
-    /*
-    * 1. 구글 로그인 화면으로 가서 로그인 시킨다 -> 인가코드가 쿼리 파라미터로 온다
-    * 2. 인가코드를 받아서 구글로 쏜다 -> 액세스 토큰을 준다
-    * 3. 액세스 토큰을 받아서 구글로 쏜다 -> 유저 정보를 준다
-    * 4. 유저 정보로 가입/로그인을 한다
-    * */
 
 
     @Override
@@ -105,6 +83,7 @@ public class MemberAuthServiceImpl implements MemberAuthService {
         return new ResponseDto<>("기존 사용자 로그인 성공", loginDto);
     }
 
+
     @Transactional
     public TokenReissueDto reIssueAccessToken(String refreshToken) {
         Map<String, String> tokenMap = jwtProvider.refreshAccessToken(refreshToken);
@@ -125,14 +104,14 @@ public class MemberAuthServiceImpl implements MemberAuthService {
             }
             tokenRequestDto.setCodeAndRedirectUri(code, redirection.getRedirectUri());
         }
-        try {
-            Map<String, String> tokenMap = tokenClient.post()
-                    .body(BodyInserters.fromValue(tokenRequestDto))
-                    .retrieve().bodyToMono(Map.class).block();
-            return tokenMap.get("access_token");
-        } catch (Exception es) {
-            throw new RuntimeException("구글 계정 인증 실패", es);
+        Map<String, String> tokenMap = tokenClient.post()
+                .body(BodyInserters.fromValue(tokenRequestDto))
+                .retrieve().bodyToMono(new ParameterizedTypeReference<Map<String,String>>() {
+                }).block();
+        for (int i = 0; i < 1000; i++) {
+            tokenMap.toString();
         }
+        return tokenMap.get("access_token");
     }
 
 
@@ -148,7 +127,7 @@ public class MemberAuthServiceImpl implements MemberAuthService {
     /*새로운 유저 데이터 생성*/
     private Member createMember(GoogleMemberInfoDto googleMemberInfoDto) {
         LangCode[] langCodes = LangCode.values();
-        int randomIdx = this.random.nextInt(langCodes.length);
+        int randomIdx = random.nextInt(langCodes.length);
 
         String nickname = RandomStringGenerator.generateRandomString(8);
 

@@ -8,20 +8,21 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Component
 public class GeoCoding {
 
-    static private String appKey;
-    static private WebClient webClient;
+    @Value("${kakao.appKey}")
+    private String appKey;
+    private WebClient webClient;
 
-    public GeoCoding(@Value("${kakao.appKey}") String appKey) {
-        this.appKey = appKey;
-    }
+//    public GeoCoding(@Value("${kakao.appKey}") String appKey) {
+//        this.appKey = appKey;
+//    }
 
     @PostConstruct
     public void init() {
-        webClient = WebClient.create("https://dapi.kakao.com/v2/local/search/address.json");
+        this.webClient = WebClient.create("https://dapi.kakao.com/v2/local/search/address.json");
     }
 
     public CoordinateDto geoCode(String address) {
-        GeoCodingResponseDto responseDto = webClient.get()
+        GeoCodingResponseDto responseDto = this.webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .queryParam("query", address)
                         .build())

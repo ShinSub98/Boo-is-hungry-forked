@@ -1,7 +1,5 @@
 package com.chaeshin.boo.controller;
 
-import com.chaeshin.boo.exception.ExpiredTokenException;
-import com.chaeshin.boo.exception.TokenNotFoundException;
 import com.chaeshin.boo.service.member.MemberService;
 import com.chaeshin.boo.service.member.auth.MemberAuthService;
 import com.chaeshin.boo.service.member.auth.Redirection;
@@ -33,36 +31,24 @@ public class MemberController {
     @PostMapping("/nickname/")
     public ResponseEntity<ResponseDto> updateNickname(
             HttpServletRequest request, @RequestBody Map<String, String> body) {
-        try {jwtProvider.validateToken(request);}
-        catch (ExpiredTokenException e) {throw e;}
-        catch (TokenNotFoundException e) {throw e;}
+        jwtProvider.validateToken(request);
 
-        try {
-            Long memberId = jwtProvider.getMemberId(request);
-            return new ResponseEntity<>(
-                    memberService.updateNickname(memberId, body.get("nickname")),
-                    HttpStatus.OK
-            );
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        Long memberId = jwtProvider.getMemberId(request);
+        return new ResponseEntity<>(
+                memberService.updateNickname(memberId, body.get("nickname")),
+                HttpStatus.OK
+        );
     }
 
 
     @GetMapping("/info/{memberId}/")
     public ResponseEntity<ResponseDto> getInfo(HttpServletRequest request, @PathVariable Long memberId) {
-        try {jwtProvider.validateToken(request);}
-        catch (ExpiredTokenException e) {throw e;}
-        catch (TokenNotFoundException e) {throw e;}
+        jwtProvider.validateToken(request);
 
-        try {
-            return new ResponseEntity<>(
-                    memberService.getMemberInfo(memberId),
-                    HttpStatus.OK
-            );
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        return new ResponseEntity<>(
+                memberService.getMemberInfo(memberId),
+                HttpStatus.OK
+        );
     }
 
 
@@ -77,15 +63,11 @@ public class MemberController {
 
     @GetMapping("/login/")
     public ResponseEntity<ResponseDto<LoginDto>> loginBackDev(@RequestParam String code) {
-        try {
-            ResponseDto<LoginDto> result = memberAuthService.login(code, Redirection.BACK);
-            if (!result.getData().isExistUser()) {
-                return new ResponseEntity<>(result, HttpStatus.CREATED);
-            } else {
-                return new ResponseEntity<>(result, HttpStatus.OK);
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        ResponseDto<LoginDto> result = memberAuthService.login(code, Redirection.BACK);
+        if (!result.getData().isExistUser()) {
+            return new ResponseEntity<>(result, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(result, HttpStatus.OK);
         }
     }
 
@@ -101,41 +83,28 @@ public class MemberController {
 
     @GetMapping("/server/login/")
     public ResponseEntity<ResponseDto> loginServer(@RequestParam String code) {
-        try {
-            return new ResponseEntity(
-                    memberAuthService.login(code, Redirection.DOMAIN),
-                    HttpStatus.OK);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        return new ResponseEntity(
+            memberAuthService.login(code, Redirection.DOMAIN),
+            HttpStatus.OK);
     }
 
 
     @GetMapping("/signin/")
     public ResponseEntity<RedirectUriDto> redirectFrontDev() {
-        try {
-            String redirectUri = memberAuthService.getRedirectUri(Redirection.FRONT);
-            return new ResponseEntity<>(
-                    new RedirectUriDto(redirectUri),
-                    HttpStatus.OK
-            );
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-
+        String redirectUri = memberAuthService.getRedirectUri(Redirection.FRONT);
+        return new ResponseEntity<>(
+                new RedirectUriDto(redirectUri),
+                HttpStatus.OK
+        );
     }
 
 
     @GetMapping("/userinfo/")
     public ResponseEntity<ResponseDto> loginFrontDev(@RequestBody Map<String, String> body) {
-        try {
-            return new ResponseEntity(
-                    memberAuthService.login(body.get("address"),
-                            Redirection.FRONT),
-                    HttpStatus.OK);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        return new ResponseEntity(
+                memberAuthService.login(body.get("address"),
+                        Redirection.FRONT),
+                HttpStatus.OK);
     }
 
 

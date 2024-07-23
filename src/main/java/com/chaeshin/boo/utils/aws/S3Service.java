@@ -22,34 +22,23 @@ public class S3Service {
     @Value("${spring.cloud.aws.s3.bucket}")
     private String bucket;
     public static final String FILE_EXTENSION_SEPARATOR = ".";
-    private final S3Client s3Client;
     private static final String SUFFIX = ".jpg";
+    private final S3Client s3Client;
 
     public String uploadFile(MultipartFile image) throws IOException {
-        if (image.isEmpty()) {
-            log.info("file is null");
-            return "";
-        }
-
         String fileName = getFileName(image);
         File resizedImage = resizeImage(image, fileName);
         String fileKey = fileName + SUFFIX;
 
-        try {
-            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-                    .bucket(bucket)
-                    .contentType("image/jpg")
-                    .key(fileKey).build();
-            RequestBody requestBody = RequestBody.fromFile(resizedImage);
-            s3Client.putObject(putObjectRequest, requestBody);
-        } catch (Exception e) {
-            log.error("Failed to upload file", e);
-            throw new RuntimeException(e);
-        }
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(bucket)
+                .contentType("image/jpg")
+                .key(fileKey).build();
+        RequestBody requestBody = RequestBody.fromFile(resizedImage);
+        s3Client.putObject(putObjectRequest, requestBody);
         GetUrlRequest getUrlRequest = GetUrlRequest.builder()
                 .bucket(bucket).key(fileKey).build();
         return s3Client.utilities().getUrl(getUrlRequest).toString();
-
     }
 
 
@@ -62,23 +51,18 @@ public class S3Service {
     private static String buildFileName(String originalFileName) {
         int fileExtensionIndex = originalFileName.lastIndexOf(FILE_EXTENSION_SEPARATOR); // 파일 확장자 구분점
         String fileName = originalFileName.substring(0, fileExtensionIndex); // 파일 이름
-        String now = String.valueOf(System.currentTimeMillis()); // 파일 업로드 시간
+        String now = java.lang.String.valueOf(System.currentTimeMillis()); // 파일 업로드 시간
         return fileName + now;
     }
 
 
     private static File resizeImage(MultipartFile image, String fileName) throws IOException {
-        try {
-            File file = File.createTempFile(fileName, SUFFIX);
-
-            Thumbnails.of(image.getInputStream())
-                    .size(800, 600)
-                    .outputQuality(0.7)
-                    .outputFormat("jpg")
-                    .toFile(file);
-            return file;
-        } catch (IOException e) {
-            throw new IOException("이미지 압축 실패", e);
-        }
+        File file = File.createTempFile(fileName, SUFFIX);
+        Thumbnails.of(image.getInputStream())
+                .size(800, 600)
+                .outputQuality(0.7)
+                .outputFormat("jpg")
+                .toFile(file);
+        return file;
     }
 }

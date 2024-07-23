@@ -9,18 +9,22 @@ import software.amazon.awssdk.services.s3.S3Client;
 
 @Configuration
 public class AwsConfig {
-    static private String accessKey;
-    static private String secretKey;
-    static private String region;
+
+    @Value("${spring.cloud.aws.credentials.accessKey}")
+    private String accessKey;
+    @Value("${spring.cloud.aws.credentials.secretKey}")
+    private String secretKey;
+    @Value("${spring.cloud.aws.region.static}")
+    private String region;
 
 
-    public AwsConfig(@Value("${spring.cloud.aws.credentials.accessKey}") String accessKey,
-                     @Value("${spring.cloud.aws.credentials.secretKey}") String secretKey,
-                     @Value("${spring.cloud.aws.region.static}") String region) {
-        this.accessKey = accessKey;
-        this.secretKey = secretKey;
-        this.region = region;
-    }
+//    public AwsConfig(@Value("${spring.cloud.aws.credentials.accessKey}") String accessKey,
+//                      @Value("${spring.cloud.aws.credentials.secretKey}") String secretKey,
+//                      @Value("${spring.cloud.aws.region.static}") String region) {
+//        this.accessKey = accessKey;
+//        this.secretKey = secretKey;
+//        this.region = region;
+//    }
 
     @Bean
     public S3Client s3Client() {

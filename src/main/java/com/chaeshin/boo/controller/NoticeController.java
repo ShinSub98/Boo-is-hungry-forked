@@ -23,23 +23,15 @@ public class NoticeController {
 
     @GetMapping("/")
     public ResponseEntity<ResponseDto<List<NoticeListDto>>> getNotices() {
-        try {
-            return new ResponseEntity<>(
-                    noticeService.getNoticeList(), HttpStatus.OK);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        return new ResponseEntity<>(
+                noticeService.getNoticeList(), HttpStatus.OK);
     }
 
     @GetMapping("/{noticeId}/")
     public ResponseEntity<ResponseDto<NoticeDetailDto>> getNotice(
             @PathVariable Long noticeId) {
-        try {
-            return new ResponseEntity<>(
-                    noticeService.getNoticeDetail(noticeId), HttpStatus.OK);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        return new ResponseEntity<>(
+                noticeService.getNoticeDetail(noticeId), HttpStatus.OK);
     }
 }
 

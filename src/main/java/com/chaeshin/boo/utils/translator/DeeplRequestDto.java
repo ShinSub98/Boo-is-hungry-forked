@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 public class DeeplRequestDto {
 
-    private List<String> text;
+    private final List<String> text;
     @JsonProperty("target_lang")
     private LangCode targetLang;
 

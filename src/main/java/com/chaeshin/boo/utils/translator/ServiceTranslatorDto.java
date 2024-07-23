@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class ServiceTranslatorDto {
 
-    private String text;
+    private final String text;
     @JsonProperty("source")
     private LangCode sourceLang;
     @JsonProperty("target")

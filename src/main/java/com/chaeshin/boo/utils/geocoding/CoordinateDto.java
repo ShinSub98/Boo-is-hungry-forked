@@ -5,8 +5,8 @@ import lombok.Getter;
 @Getter
 public class CoordinateDto {
 
-    private String latitude;
-    private String longitude;
+    private final String latitude;
+    private final String longitude;
 
     public CoordinateDto(String latitude, String longitude) {
         this.latitude = latitude;
