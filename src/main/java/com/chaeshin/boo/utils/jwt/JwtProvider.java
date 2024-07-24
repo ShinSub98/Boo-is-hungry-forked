@@ -114,7 +114,7 @@ public class JwtProvider {
         Map<String, String> tokenMap = new HashMap<>();
         tokenMap.put("access", createAccessToken(memberId));
         tokenMap.put("refresh", createRefreshToken(memberId));
-        blackList.put(refreshToken, expireAt);
+        blackList.put(refreshToken, expireAt.toString());
         return tokenMap;
     }
 

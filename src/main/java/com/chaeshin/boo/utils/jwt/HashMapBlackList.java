@@ -4,7 +4,10 @@ import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -15,11 +18,21 @@ public class HashMapBlackList implements TokenBlackList{
 
     private ConcurrentHashMap<String, Date> blackList;
     private ScheduledExecutorService scheduler;
+    private SimpleDateFormat formatter = new SimpleDateFormat(
+            "EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
 
 
     @Override
-    public void put(String token, Date date) {
-        blackList.put(token, date);
+    public void put(String token, String date) {
+        for (int i = 0; i < 100; i++) {
+            System.out.println("date = " + date);
+        }
+
+        try {
+            blackList.put(token, formatter.parse(date));
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
